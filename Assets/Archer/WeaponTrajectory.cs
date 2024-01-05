@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-using JolDeFort.Core;
-
 
 namespace JolDeFort.Assets
 {
@@ -19,17 +17,20 @@ namespace JolDeFort.Assets
 			lineRenderer = GetComponent<LineRenderer>();
 		}
 
+
+		private float m_offset;
+		private Vector2 m_position;
+		private Vector2 m_current = Vector3.zero;
 		public void UpdateTrace(Vector2 pointerPosition, float force, float angle)
 		{
 			lineRenderer.positionCount = totalTrajectoryPoints;
-			float offset;
-			Vector2 current = transform.position;
+			m_position = transform.position;
 			for (int i = 0; i < totalTrajectoryPoints; i++)
 			{
-				offset = i * trajectoryDetail;
-				current.x += force * offset * Mathf.Cos(angle);
-				current.y += (force * offset * Mathf.Sin(angle)) - ((-Physics2D.gravity.y * Mathf.Pow(offset, 2)) / 2);
-				lineRenderer.SetPosition(i, current);
+				m_offset = i * trajectoryDetail;
+				m_current.x = m_position.x + force * m_offset * Mathf.Cos(angle);
+				m_current.y = m_position.y + (force * m_offset * Mathf.Sin(angle)) - ((-Physics2D.gravity.y * Mathf.Pow(m_offset, 2)) / 2);
+				lineRenderer.SetPosition(i, m_current);
 			}
 		}
 	}

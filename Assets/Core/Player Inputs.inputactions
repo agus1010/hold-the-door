@@ -1,5 +1,5 @@
 {
-    "name": "Archer Inputs",
+    "name": "Player Inputs",
     "maps": [
         {
             "name": "Player",
@@ -7,20 +7,20 @@
             "actions": [
                 {
                     "name": "Attack",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "eabae4ab-e34c-43e9-9628-3d39d0704c33",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.5,pressPoint=0.2)",
                     "initialStateCheck": false
                 },
                 {
                     "name": "Special",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "b30fc442-7a80-4722-92a6-1845b13e6556",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Delta",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=1,pressPoint=0.2)",
                     "initialStateCheck": false
                 },
                 {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 
 namespace JolDeFort.Core
@@ -9,49 +9,54 @@ namespace JolDeFort.Core
 	{
 		public Vector2 CursorPosition => Mouse.current.position.ReadValue();
 
-		public bool AttackValue { get; private set; }
-		public bool SpecialValue { get; private set; }
-		public Vector2 ZoomValue { get; private set; }
+		public InputAction.CallbackContext AttackInputCallbackContext { get; private set; }
+		public InputAction.CallbackContext SpecialInputCallbackContext { get; private set; }
+		public InputAction.CallbackContext ZoomInputCallbackContext { get; private set; }
 
-		public UnityEvent<bool> AttackPressed;
-		public UnityEvent AttackReleased;
-		public UnityEvent<bool> SpecialPressed;
-		public UnityEvent SpecialReleased;
-		public UnityEvent<Vector2> ZoomPerformed;
+		public UnityEvent<PlayerInputs> AttackStarted;
+		public UnityEvent<PlayerInputs> AttackPerformed;
+		public UnityEvent<PlayerInputs> AttackCancelled;
+
+		public UnityEvent<PlayerInputs> SpecialStarted;
+		public UnityEvent<PlayerInputs> SpecialPerformed;
+		public UnityEvent<PlayerInputs> SpecialCancelled;
+
+		public UnityEvent<PlayerInputs> ZoomStarted;
+		public UnityEvent<PlayerInputs> ZoomPerformed;
+		public UnityEvent<PlayerInputs> ZoomCancelled;
 
 
-
-		public void HandleAttack(InputAction.CallbackContext context)
+		public void HandleAttackInput(InputAction.CallbackContext callbackContext)
 		{
-			bool newValue = context.ReadValueAsButton();
-			if (newValue != AttackValue)
-			{
-				AttackValue = newValue;
-				if(AttackValue)
-					AttackPressed?.Invoke(AttackValue);
-				if(context.performed)
-					AttackReleased?.Invoke();
-			}
+			AttackInputCallbackContext = callbackContext;
+			handleInput(callbackContext, AttackStarted, AttackPerformed, AttackCancelled);
 		}
 
-		public void HandleSpecial(InputAction.CallbackContext context)
+		public void HandleSpecialInput(InputAction.CallbackContext callbackContext)
 		{
-			bool newValue = context.ReadValueAsButton();
-			if (newValue != SpecialValue)
-			{
-				SpecialValue = newValue;
-				SpecialPressed?.Invoke(SpecialValue);
-			}
+			SpecialInputCallbackContext = callbackContext;
+			handleInput(callbackContext, SpecialStarted, SpecialPerformed, SpecialCancelled);
 		}
 
-		public void HandleZoom(InputAction.CallbackContext context)
+		public void HandleZoomInput(InputAction.CallbackContext callbackContext)
 		{
-			Vector2 newValue = context.ReadValue<Vector2>();
-			if (newValue != ZoomValue)
-			{
-				ZoomValue = newValue;
-				ZoomPerformed?.Invoke(ZoomValue);
-			}
+			ZoomInputCallbackContext = callbackContext;
+			handleInput(callbackContext, ZoomStarted, ZoomPerformed, ZoomCancelled);
+		}
+
+
+		private void handleInput(
+			InputAction.CallbackContext callbackContext,
+			UnityEvent<PlayerInputs> startedCallback,
+			UnityEvent<PlayerInputs> performedCallback,
+			UnityEvent<PlayerInputs> cancelledCallback)
+		{
+			if (callbackContext.started)
+				startedCallback?.Invoke(this);
+			if (callbackContext.performed)
+				performedCallback?.Invoke(this);
+			if (callbackContext.canceled)
+				cancelledCallback?.Invoke(this);
 		}
 	}
 }

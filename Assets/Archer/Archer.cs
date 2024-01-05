@@ -7,13 +7,13 @@ namespace JolDeFort.Assets
 {
 	public class Archer : MonoBehaviour
 	{
-		public float maxForce = 10f;
 		public float currentCooldown = 0f;
-		public float maxCooldown = 1f;
+		public float maxCooldown = 1f; 
 
 		[SerializeField] private PlayerInputs playerInputs;
 		[SerializeField] private GameObject arrowPrefab;
 		[SerializeField] private WeaponTrajectory weaponTrajectory;
+		[SerializeField] private ForceProvider forceProvider;
 
 		private Vector2 pointerPosition => playerInputs.CursorPosition;
 
@@ -35,19 +35,11 @@ namespace JolDeFort.Assets
 		private void Update()
 		{
 			m_frameExitAngle = calcExitAngle();
-			m_frameOutputForce = calcOutputForceModulus();
-			weaponTrajectory.UpdateTrace(pointerPosition, maxForce, m_frameExitAngle);
+			m_frameOutputForce = forceProvider.CalculateCurrentForce(pointerPosition);
+			weaponTrajectory.UpdateTrace(pointerPosition, m_frameOutputForce, m_frameExitAngle);
 			if (currentCooldown > 0f)
 				currentCooldown = Mathf.Max(0, currentCooldown - Time.deltaTime);
 		}
-
-		
-		private float calcOutputForceModulus()
-			=> Mathf.Clamp(
-				value: 2 * Mathf.Sqrt(Mathf.Pow(Mathf.Max(0, pointerPosition.x), 2) + Mathf.Pow(pointerPosition.y, 2)),
-				min: 0,
-				max: maxForce
-			);
 
 		private float calcExitAngle()
 			=> Mathf.Atan2(pointerPosition.y - 6f, pointerPosition.x);
