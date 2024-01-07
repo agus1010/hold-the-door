@@ -3,7 +3,7 @@
 using JolDeFort.Misc;
 
 
-namespace JolDeFort.Assets
+namespace JolDeFort.Core
 {
 	[RequireComponent(typeof(FrameTimer))]
 	public class ForceProvider : MonoBehaviour

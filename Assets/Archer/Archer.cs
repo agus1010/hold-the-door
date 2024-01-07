@@ -36,7 +36,7 @@ namespace JolDeFort.Assets
 		{
 			m_frameExitAngle = calcExitAngle();
 			m_frameOutputForce = forceProvider.CalculateCurrentForce(pointerPosition);
-			weaponTrajectory.UpdateTrace(pointerPosition, m_frameOutputForce, m_frameExitAngle);
+			weaponTrajectory.Draw(m_frameOutputForce, m_frameExitAngle);
 			if (currentCooldown > 0f)
 				currentCooldown = Mathf.Max(0, currentCooldown - Time.deltaTime);
 		}
