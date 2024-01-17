@@ -15,10 +15,10 @@ namespace JolDeFort.Core
 		private FrameTimer frameTimer;
 
 
-		public float CalculateCurrentForce(Vector2 pointerPosition)
-			=> CalculateCurrentForce(frameTimer.timeElapsed, pointerPosition);
+		public float Calculate(Vector2 pointerPosition)
+			=> Calculate(frameTimer.timeElapsed, pointerPosition);
 
-		public float CalculateCurrentForce(float attackHoldTime, Vector2 pointerPosition)
+		public float Calculate(float attackHoldTime, Vector2 pointerPosition)
 		{
 			float baseForceModulus = 2 * Mathf.Sqrt(Mathf.Pow(Mathf.Max(0, pointerPosition.x), 2) + Mathf.Pow(pointerPosition.y, 2));
 			float modifiedForceModulus = baseForceModulus + forceMultiplier * attackHoldTime;

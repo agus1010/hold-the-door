@@ -14,13 +14,19 @@ namespace JolDeFort.Core
 		/*public static float CalculateProjectileHeight()
 		{
 
-		}
+		}*/
 
-		public static Vector2 CalculateNecesaryForce(float mass, float angle, Vector2 )
+		public static float CalculateForceModulus(float mass, Vector2 maxHeightPosition)
+			// mass * sqrt(x^2 + y^2)
+			=> mass * Mathf.Sqrt(Mathf.Pow(maxHeightPosition.x, 2) + Mathf.Pow(maxHeightPosition.y, 2));
+
+		//public static Vector2 CalculateNecesaryForce(float mass, )
+
+		public static Vector2 CalculateNecesaryForce(float mass, float angle, Vector2 desiredPosition)
 		{
 			// F = m*a
-
-		}*/
+			return Vector2.zero;
+		}
 
 		public static Vector2 LerpProjectileVelocity(Vector2 initialPosition, float force, float angle, float t)
 		{
