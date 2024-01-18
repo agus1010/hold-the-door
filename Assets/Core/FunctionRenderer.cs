@@ -35,8 +35,14 @@ namespace JolDeFort.Core
 		private LineRenderer _lineRenderer;
 
 
+		public void Draw(ITrajectoryFunctionProvider trajectoryFunctionProvider)
+			=> Draw(trajectoryFunctionProvider.function);
+
 		public void Draw(System.Func<int, Vector3> function)
 			=> Draw(firstIndex, lastIndex, function);
+
+		public void Draw(int firstIndex, int lastIndex, ITrajectoryFunctionProvider trajectoryFunctionProvider)
+			=> Draw(firstIndex, lastIndex, trajectoryFunctionProvider.function);
 
 		public void Draw(int firstIndex, int lastIndex, System.Func<int, Vector3> function)
 			=> lineRenderer.SetPositions(getPositions(firstIndex, lastIndex, function).ToArray());
