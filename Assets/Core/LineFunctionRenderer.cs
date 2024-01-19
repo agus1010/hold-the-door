@@ -6,10 +6,11 @@ using UnityEngine;
 namespace JolDeFort.Core
 {
 	[RequireComponent(typeof(LineRenderer))]
-	public class FunctionRenderer : MonoBehaviour
+	public class LineFunctionRenderer : MonoBehaviour
 	{
 		[SerializeField] private int _firstIndex = 0;
 		[SerializeField] private int _lastIndex = 100;
+		[Range(.00001f, 1f)] public float distanceBetweenPoints = 1.0f;
 
 		public int firstIndex
 		{
@@ -35,16 +36,16 @@ namespace JolDeFort.Core
 		private LineRenderer _lineRenderer;
 
 
-		public void Draw(ITrajectoryFunctionProvider trajectoryFunctionProvider)
+		public void Draw(ILineFunctionProvider trajectoryFunctionProvider)
 			=> Draw(trajectoryFunctionProvider.function);
 
-		public void Draw(System.Func<int, Vector3> function)
+		public void Draw(System.Func<float, Vector3> function)
 			=> Draw(firstIndex, lastIndex, function);
 
-		public void Draw(int firstIndex, int lastIndex, ITrajectoryFunctionProvider trajectoryFunctionProvider)
+		public void Draw(int firstIndex, int lastIndex, ILineFunctionProvider trajectoryFunctionProvider)
 			=> Draw(firstIndex, lastIndex, trajectoryFunctionProvider.function);
 
-		public void Draw(int firstIndex, int lastIndex, System.Func<int, Vector3> function)
+		public void Draw(int firstIndex, int lastIndex, System.Func<float, Vector3> function)
 			=> lineRenderer.SetPositions(getPositions(firstIndex, lastIndex, function).ToArray());
 
 
@@ -57,14 +58,18 @@ namespace JolDeFort.Core
 		{
 			_lineRenderer = lineRenderer;
 			lineRenderer.positionCount = pointsAmount;
+			lineRenderer.useWorldSpace = false;
 			setPositionCount();
 		}
 
 
-		private IEnumerable<Vector3> getPositions(int firstPos, int lastPos, System.Func<int, Vector3> function)
-			=> Enumerable.Range(firstPos, lastPos).Select(i => function(i));
+		private IEnumerable<Vector3> getPositions(int firstPos, int lastPos, System.Func<float, Vector3> function)
+			=> Enumerable.Range(firstPos, lastPos).Select(i => function(nextIndex(i)));
 
 		private void setPositionCount()
 			=> lineRenderer.positionCount = System.Math.Abs(_firstIndex - _lastIndex);
+
+		private float nextIndex(int index)
+			 => index * distanceBetweenPoints;
 	}
 }

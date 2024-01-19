@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
-
-
-namespace JolDeFort.Core
+﻿namespace JolDeFort.Core
 {
-	public interface ITrajectoryFunctionProvider
+	public interface ILineFunctionProvider
 	{
-		public System.Func<int, Vector3> function { get; }
+		public System.Func<float, UnityEngine.Vector3> function { get; }
 	}
 }

@@ -12,7 +12,7 @@ namespace JolDeFort.Assets
 
 		[SerializeField] private PlayerInputs playerInputs;
 		[SerializeField] private GameObject arrowPrefab;
-		[SerializeField] private FunctionRenderer functionRenderer;
+		[SerializeField] private LineFunctionRenderer functionRenderer;
 		[SerializeField] private ForceProvider forceProvider;
 
 		private Vector2 pointerPosition => playerInputs.CursorPosition;
@@ -34,16 +34,22 @@ namespace JolDeFort.Assets
 
 		private void Update()
 		{
-			m_frameExitAngle = JDFPhysics.CalculateExitAngle(transform.position, pointerPosition);
+			m_frameExitAngle = JDFPhysics.ExitAngle(pointerPosition);
 			m_frameOutputForce = forceProvider.Calculate(pointerPosition);
-			System.Func<int, Vector3> trajectoryFunction = (x) => JDFPhysics.LerpProjectilePosition(transform.position, m_frameOutputForce, m_frameExitAngle, x);
+			System.Func<float, Vector3> trajectoryFunction = 
+				(x) => 
+					JDFPhysics.LerpProjectilePosition(
+						transform.position,
+						m_frameOutputForce,
+						m_frameExitAngle,
+						x);
 			functionRenderer.Draw(trajectoryFunction);
 			if (currentCooldown > 0f)
 				currentCooldown = Mathf.Max(0, currentCooldown - Time.deltaTime);
 		}
 
 		private float calcExitAngle()
-			=> Mathf.Atan2(pointerPosition.y - 6f, pointerPosition.x);
+			=> Mathf.Atan2(pointerPosition.y, pointerPosition.x);
 
 		private Vector3 calcOutputVelocity()
 			=> new Vector3(
